@@ -23,6 +23,7 @@
 # \e[K  => clears everything after the cursor on the current line
 # \e[2K => clear everything on the current line
 
+ARROWCOLOR="red"
 
 # turns seconds into human readable time
 # 165392 => 1d 21h 56m 32s
@@ -133,8 +134,10 @@ prompt_pure_preprompt_render() {
 	local git_color=242
 	[[ -n ${prompt_pure_git_last_dirty_check_timestamp+x} ]] && git_color=red
 
-	# construct preprompt, beginning with path
-	local preprompt="%F{blue}%~%f"
+	# construct preprompt, beginning with arrow top
+    local preprompt="%F{$ARROWCOLOR} ╭┤%f"
+    # current path
+	preprompt+="%F{blue}%~%f"
 	# git info
 	preprompt+="%F{$git_color}${vcs_info_msg_0_}${prompt_pure_git_dirty}%f"
 	# git pull/push arrows
@@ -354,7 +357,9 @@ prompt_pure_setup() {
 	[[ $UID -eq 0 ]] && prompt_pure_username=' %F{white}%n%f%F{242}@%m%f'
 
 	# prompt turns red if the previous command didn't exit with 0
-	PROMPT="%(?.%F{magenta}.%F{red})${PURE_PROMPT_SYMBOL:-❯}%f "
+	# PROMPT="%(?.%F{magenta}.%F{red})${PURE_PROMPT_SYMBOL:-❯}%f "
+    # Static prompt color to be the same as preprompt
+    PROMPT="%F{$ARROWCOLOR} ╰──➤%f "
 }
 
 prompt_pure_setup "$@"
